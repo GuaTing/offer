@@ -1,0 +1,95 @@
+//这道题不是很懂它的意图，Java也找不到方法做，在网上搜了一个C++的解法
+include <iostream>
+#include <string>
+#include <cstring>
+using namespace std;
+ 
+class CMyString{
+public:
+	CMyString (char* pData = NULL);
+	CMyString (const CMyString& str);
+	CMyString& operator= (const CMyString &str); 
+	~CMyString (void);
+	void print();
+ 
+private:
+	char* m_pData;
+};
+ 
+CMyString::CMyString(char* pData)
+{
+	if(NULL == pData){
+		m_pData = NULL;	
+		return;	
+	}
+	else{
+		unsigned int len = strlen(pData) + 1;
+		m_pData = new char[len];
+		for(int i = 0; i < len; i ++){
+			m_pData[i] = pData[i];
+		}
+	}
+}
+CMyString::CMyString(const CMyString& str)
+{
+	unsigned int len = strlen(str.m_pData) + 1;
+	m_pData = new char[len];
+	for(int i = 0; i < len; i ++){
+		m_pData[i] = str.m_pData[i];
+	}
+}
+ 
+CMyString::~CMyString()
+{
+	delete []m_pData;
+}
+
+CMyString& CMyString::operator=(const CMyString &str)
+{
+	if(this != &str){
+		char* tmp = new char[strlen(str.m_pData) + 1];
+		strcpy(tmp, str.m_pData);
+		delete []m_pData;
+		m_pData = tmp;
+	}
+	return *this;
+}
+ 
+CMyString& CMyString:: operator=(const CMyString &str)
+{
+	if(this != &str){
+		CMyString strTemp(str);
+		char *pTemp = strTemp.m_pData;
+		strTemp.m_pData = m_pData;
+		m_pData = pTemp;
+	}
+	return *this;
+}
+void CMyString::print()
+{
+	cout << m_pData << endl;
+}
+void test()
+{
+	char test[] = "hello world";
+	CMyString myStr1(test);
+	CMyString myStr2;
+	myStr2 = myStr1;
+	cout << test << endl;
+	myStr1.print();
+	myStr2.print();
+ 
+	CMyString myStr3(test);
+	myStr1 = myStr3;
+	myStr1.print();
+ 
+	CMyString myStr4;
+	myStr4 = myStr2 = myStr1;
+	myStr4.print();
+}
+int main()
+{
+	test();
+ 
+	return 0;
+}
